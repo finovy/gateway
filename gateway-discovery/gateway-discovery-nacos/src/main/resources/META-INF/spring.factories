@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  tech.finovy.gateway.discovery.nacos.NacosDiscoveryConfigBootstrapConfiguration

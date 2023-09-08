@@ -1,0 +1,137 @@
+server:
+  port: ${GATEWAY_PORT:8750}
+spring:
+  application:
+    id: ${APPLICATION_NAME:gateway}
+    name: ${APPLICATION_NAME:gateway}
+  config:
+    import:
+      - optional:nacos:${APPLICATION_NAME:gateway}.yaml
+  cloud:
+    gateway:
+      enabled: true
+      httpclient:
+        connect-timeout: 20000
+        response-timeout: 60s
+        pool:
+          max-idle-time: 10000
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
+    loadbalancer:
+      ribbon:
+        enabled: false
+    nacos:
+      username: ${NACOS_USERNAME:}
+      password: ${NACOS_PASSWORD:}
+      config:
+        server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+        namespace: ${NACOS_CONFIG_NAMESPACE:}
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        maxRetry: 10
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:}
+        enabled: true
+        register-enabled: true
+        metadata:
+          version: ${NACOS_DISCOVERY_METADATA_VERSION:0.0}
+    sentinel:
+      transport:
+        port: ${SENTINEL_DASHBOARD_PORT:8719}
+        dashboard: ${SENTINEL_DASHBOARD_ADDR:}
+      datasource:
+        flow-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_FLOW_GROUP_ID:SENTINEL_FLOW_GROUP}
+            rule-type: FLOW
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+        gw-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_GW_GROUP_ID:SENTINEL_GW_GROUP}
+            rule-type: GW_FLOW
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+        gw-api-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_GW_API_GROUP_ID:SENTINEL_GW_API_GROUP}
+            rule-type: GW_API_GROUP
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+        degrade-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_DEGRADE_GROUP_ID:SENTINEL_DEGRADE_GROUP}
+            rule-type: DEGRADE
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+        system-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_SYSTEM_GROUP_ID:SENTINEL_SYSTEM_GROUP}
+            rule-type: SYSTEM
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+        param-flow-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_PARAM_FLOW_GROUP_ID:SENTINEL_PARAM_FLOW_GROUP}
+            rule-type: PARAM_FLOW
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+        authority-nacos:
+          nacos:
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
+            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            group-id: ${NACOS_SENTINEL_AUTHORITY_GROUP_ID:SENTINEL_AUTHORITY_GROUP}
+            rule-type: AUTHORITY
+            data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
+            data-type: json
+logging:
+  config: classpath:logback-spring.xml
+  project: ${LOG_STORE_PROJECT:}
+  endpoint-url: ${LOG_STORE_ENDPOINT:}
+  access-key: ${LOG_STORE_KEY:TEST-KEY}
+  access-secret: ${LOG_STORE_SECRET:TEST-SERET}
+  log-store: ${APPLICATION_NAME:gateway}
+  topic: ${LOG_STORE_TOPIC:${APPLICATION_NAME:gateway}}
+  console-level: ${LOG_CONSOLE_LEVEL:INFO}
+#  level:
+#    org.springframework.cloud.gateway: trace
+#    org.springframework.http.server.reactive: trace
+#    org.springframework.web.reactive: trace
+#    org.springframework.boot.autoconfigure.web: trace
+#org.springframework.gateway.httpserver.wiretap: true
+#org.springframework.gateway.httpclient.wiretap: true
+
+
+endpoints:
+  enabled: false
+  env:
+    enabled: false
+management:
+  endpoints:
+    enabled-by-default: false
+    info:
+      enabled: false
+
+gateway:
+  exception:
+    throw-error-to-page: true
+  auth:
+    trace-enable: true
+    skip-refresh: false
+  event:
+    enable: false

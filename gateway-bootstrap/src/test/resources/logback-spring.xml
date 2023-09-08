@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <springProperty scope="context" name="application" source="spring.application.name" defaultValue="application"/>
+    <springProperty scope="context" name="endpointUrl" source="logging.endpoint-url" defaultValue=""/>
+    <springProperty scope="context" name="accessKeyId" source="logging.access-key" defaultValue=""/>
+    <springProperty scope="context" name="accessKeySecret" source="logging.access-secret" defaultValue=""/>
+    <springProperty scope="context" name="logStore" source="logging.log-store" defaultValue="log-store"/>
+    <springProperty scope="context" name="project" source="logging.project" defaultValue="app-project"/>
+    <springProperty scope="context" name="topic" source="logging.topic" defaultValue="app-log"/>
+    <springProperty scope="context" name="consoleLevel" source="logging.console-level" defaultValue="WARN"/>
+    <contextName>${application}</contextName>
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <logger name="org.apache.http.impl.conn.Wire" level="WARN"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${consoleLevel}</level>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} %line- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="tech.finovy.gateway.globalfilter.GlobalChainEventPushHandler" level="INFO" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="tech.finovy.gateway.exception.push.handler" level="INFO" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+    <root level="info" additivity="false">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

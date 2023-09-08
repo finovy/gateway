@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "spring.cloud.nacos.server-addr",
+      "type": "java.lang.String",
+      "defaultValue": "127.0.0.1:8848",
+      "description": "nacos server address."
+    }
+  ]
+}
