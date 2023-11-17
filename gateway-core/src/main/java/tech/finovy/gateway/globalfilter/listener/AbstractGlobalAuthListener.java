@@ -1,7 +1,7 @@
 package tech.finovy.gateway.globalfilter.listener;
 
 
-import tech.finovy.gateway.common.chain.AbstractChainListener;
+import tech.finovy.framework.common.core.chain.AbstractChainListener;
 import tech.finovy.gateway.common.constant.GlobalAuthConstant;
 import tech.finovy.gateway.globalfilter.GlobalChainContext;
 

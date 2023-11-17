@@ -20,11 +20,11 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.PrematureCloseException;
 import tech.finovy.gateway.common.constant.Constant;
-import tech.finovy.gateway.common.context.ConfigurationContext;
-import tech.finovy.gateway.common.context.ConfigurationContextHolder;
+import tech.finovy.gateway.context.ConfigurationContext;
+import tech.finovy.gateway.context.ConfigurationContextHolder;
 import tech.finovy.gateway.common.entity.DegradeEntity;
-import tech.finovy.gateway.common.exception.DegradeLogEntity;
-import tech.finovy.gateway.common.exception.WebClientBuilderService;
+import tech.finovy.gateway.exception.DegradeLogEntity;
+import tech.finovy.gateway.exception.WebClientBuilderService;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 

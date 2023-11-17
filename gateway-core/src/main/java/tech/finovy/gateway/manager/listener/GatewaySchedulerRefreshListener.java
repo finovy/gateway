@@ -3,14 +3,14 @@ package tech.finovy.gateway.manager.listener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.finovy.gateway.common.configuration.ConversionUtil;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.framework.common.core.listener.AbstractShardingEngineStartupRefreshListener;
+import tech.finovy.gateway.common.util.ConversionUtil;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.constant.GlobalAuthConstant;
-import tech.finovy.gateway.config.nacos.listener.AbstractSchedulerRefreshListener;
 
 @Slf4j
 @Component
-public class GatewaySchedulerRefreshListener extends AbstractSchedulerRefreshListener {
+public class GatewaySchedulerRefreshListener extends AbstractShardingEngineStartupRefreshListener {
 
     @Autowired
     private GatewayConfiguration globalAuthConfiguration;

@@ -3,86 +3,40 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-build</artifactId>
-        <version>4.0.4</version>
+        <groupId>tech.finovy</groupId>
+        <artifactId>framework-cloud-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <groupId>tech.finovy</groupId>
     <artifactId>gateway</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
     <properties>
         <revision>0.1.0-SNAPSHOT</revision>
-        <lombol.version>1.18.26</lombol.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <fastjson.version>1.2.83</fastjson.version>
+        <lombok.version>1.18.26</lombok.version>
         <io.grpc.version>1.54.1</io.grpc.version>
-        <nacos.client.version>2.2.4</nacos.client.version>
-
-        <spring.cloud.version>2022.0.2</spring.cloud.version>
-        <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
-
+        <apm-toolkit-trace.version>8.16.0</apm-toolkit-trace.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <!-- Maven plugin versions -->
-        <!-- Build -->
-        <easyj-maven-plugin.version>1.0.5</easyj-maven-plugin.version>
-        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <flatten-maven-plugin.version>1.4.0</flatten-maven-plugin.version>
     </properties>
 
     <modules>
         <module>gateway-bootstrap</module>
-        <module>gateway-discovery</module>
-        <module>gateway-config</module>
-        <module>gateway-transfer</module>
         <module>gateway-common</module>
-        <module>gateway-disruptor</module>
         <module>gateway-core</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-all</artifactId>
                 <version>${io.grpc.version}</version>
             </dependency>
-            <!--nacos-->
+            <!--sw8-->
             <dependency>
-                <groupId>com.alibaba.nacos</groupId>
-                <artifactId>nacos-api</artifactId>
-                <version>${nacos.client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.nacos</groupId>
-                <artifactId>nacos-common</artifactId>
-                <version>${nacos.client.version}</version>
-            </dependency>
-            <!--util-->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${apm-toolkit-trace.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -91,7 +45,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombol.version}</version>
+            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -110,96 +64,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <forkCount>1</forkCount>
-                    <reuseForks>false</reuseForks>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>${flatten-maven-plugin.version}</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                        <configuration>
-                            <updatePomFile>true</updatePomFile>
-                            <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                            <pomElements>
-                                <scm>remove</scm>
-                                <url>remove</url>
-                                <description>remove</description>
-                                <organization>remove</organization>
-                                <developers>remove</developers>
-                                <repositories>remove</repositories>
-                            </pomElements>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>${maven-clean-plugin.version}</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>./</directory>
-                            <includes>
-                                <include>*-pom.xml</include>
-                                <include>**/db_store/**</include>
-                                <include>**/sessionStore/**</include>
-                                <include>**/root.data</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <distributionManagement>
-        <repository>
-            <id>nexus-releases</id>
-            <url>${repository-releases}</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>${repository-snapshots}</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

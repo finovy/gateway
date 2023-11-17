@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.finovy.gateway.common.context.ConfigurationContext;
-import tech.finovy.gateway.common.context.ConfigurationContextHolder;
+import tech.finovy.framework.config.nacos.listener.AbstractNacosConfigDefinitionListener;
+import tech.finovy.gateway.context.ConfigurationContext;
+import tech.finovy.gateway.context.ConfigurationContextHolder;
 import tech.finovy.gateway.common.entity.SkipContentTypeItemEntity;
 import tech.finovy.gateway.common.entity.SkipItemEntity;
 import tech.finovy.gateway.common.entity.SkipUrlGroupEntity;
 import tech.finovy.gateway.common.entity.SkipUrlItemEntity;
-import tech.finovy.gateway.config.nacos.listener.AbstractNacosConfigDefinitionListener;
 import tech.finovy.gateway.router.RouteConfiguration;
 
 import java.util.*;

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
@@ -12,11 +13,12 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.constant.Constant;
 import tech.finovy.gateway.common.constant.GlobalAuthConstant;
-import tech.finovy.gateway.common.context.ConfigurationContext;
-import tech.finovy.gateway.common.context.ConfigurationContextHolder;
+import tech.finovy.gateway.context.ConfigurationContext;
+import tech.finovy.gateway.context.ConfigurationContextHolder;
+import tech.finovy.gateway.context.TraceContextItem;
 import tech.finovy.gateway.common.entity.HostItemEntity;
 import tech.finovy.gateway.common.entity.SkipUrlItemEntity;
 import tech.finovy.gateway.globalfilter.GlobalChainContext;
@@ -35,13 +37,14 @@ public class DispatcherHandlerMethodInterceptor implements MethodInterceptor {
     public static final AtomicInteger REQUEST_ATOMIC_INTEGER_SUB = new AtomicInteger();
     @Autowired
     private Map<String, Map<String, GlobalAuthListener>> globalTokenListeners;
-    private final ConfigurationContext configurationContext = ConfigurationContextHolder.get();
+    private ConfigurationContext configurationContext = ConfigurationContextHolder.get();
     @Autowired
     private GatewayConfiguration configuration;
 
     @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-        if ("handle".equals(methodInvocation.getMethod().getName()) && methodInvocation.getArguments().length == 1 && methodInvocation.getArguments()[0] instanceof ServerWebExchange exchange) {
+        if ("handle".equals(methodInvocation.getMethod().getName()) && methodInvocation.getArguments().length == 1 && methodInvocation.getArguments()[0] instanceof ServerWebExchange) {
+            ServerWebExchange exchange = (ServerWebExchange) methodInvocation.getArguments()[0];
             ServerHttpRequest request = exchange.getRequest();
             HttpHeaders headers = request.getHeaders();
             URI uri = request.getURI();
@@ -53,18 +56,30 @@ public class DispatcherHandlerMethodInterceptor implements MethodInterceptor {
             if (tokenListeners == null) {
                 tokenListeners = globalTokenListeners.get(GlobalAuthConstant.DEFAULT_TOKEN_LISTENER_TYPE);
             }
-            String traceId = getHeaderValue(request, headers, configuration.getTraceHeaderKey(), configuration.getTraceQueryKey());
+            String traceId = this.getHeaderValue(request, headers, this.configuration.getTraceHeaderKey(), this.configuration.getTraceQueryKey());
             long requestCount = REQUEST_ATOMIC_LONG.incrementAndGet();
+            TraceContextItem contextItem = TraceContextItem.deserialize(traceId);
+            if (contextItem.isValid()) {
+                // 如果traceId是skywalking的上下文， 那么转接一下
+                exchange.getRequest().mutate().header("sw8", traceId);
+                // 替换traceId的值
+                traceId = contextItem.getTraceId();
+                exchange.getRequest().mutate().header(this.configuration.getTraceHeaderKey(), traceId);
+            }
             if (StringUtils.isBlank(traceId)) {
+                // 使用生成的sw8
+                traceId = TraceContext.traceId();
+                exchange.getRequest().mutate().header(this.configuration.getTraceHeaderKey(), traceId);
+            }
+            if (StringUtils.isBlank(traceId) || "N/A".equalsIgnoreCase(traceId)) {
+                // gateway自生成
                 traceId = configuration.getTraceIdPrefix() + configuration.getStartupTimeMillis() + configuration.getTraceIdAppend() + requestCount;
-            } else {
-                traceId = traceId + "-" + REQUEST_ATOMIC_INTEGER_SUB.incrementAndGet();
             }
             String inputToken = getHeaderValue(request, headers, configuration.getHeaderTokenKey(), configuration.getQueryTokenKey());
             String tokenHeaderAppId = getHeaderValue(request, headers, configuration.getHeaderAppKey(), configuration.getQueryAppKey());
             MDC.put(Constant.TRACE_ID, traceId);
             MDC.put(Constant.TOKEN, inputToken);
-            GlobalChainContext context = new GlobalChainContext(requestCount, traceId, headers, configuration, headers.getContentType(), hostItem, urlItem,configurationContext.getRemoveHeaders(), tokenListeners);
+            GlobalChainContext context = new GlobalChainContext(requestCount, traceId, headers, configuration, headers.getContentType(), hostItem, urlItem, configurationContext.getRemoveHeaders(), tokenListeners);
             context.replaceHeader(configuration.getOutPutAppKey(), configuration.getDefaultApppId());
             context.replaceHeader(configuration.getOutPutAppKey(), hostItem.getAppId());
             context.replaceHeader(configuration.getOutPutAppKey(), tokenHeaderAppId);

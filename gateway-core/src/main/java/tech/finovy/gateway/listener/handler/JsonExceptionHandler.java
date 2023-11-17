@@ -2,6 +2,7 @@ package tech.finovy.gateway.listener.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.skywalking.apm.toolkit.trace.*;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -28,10 +29,10 @@ import org.springframework.web.reactive.result.view.ViewResolver;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tech.finovy.gateway.common.configuration.ExceptionConfiguration;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.gateway.config.ExceptionConfiguration;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.constant.Constant;
-import tech.finovy.gateway.common.exception.ExceptionEntity;
+import tech.finovy.gateway.exception.ExceptionEntity;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.UnknownHostException;
@@ -81,12 +82,33 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         result.put(HTTP_STATUS, exceptionEntity.getHttpStatus());
         ServerHttpRequest request = exchange.getRequest();
         HttpHeaders headers = request.getHeaders();
-        String traceId = getHeaderValue(request, headers, configuration.getTraceHeaderKey(), configuration.getTraceQueryKey());
-        if (StringUtils.isBlank(traceId)) {
-            traceId = configuration.getTraceIdPrefix() + configuration.getStartupTimeMillis() + configuration.getTraceIdAppend() + "E" + REQUEST_ATOMIC_INTEGER_ERROR.incrementAndGet();
-        } else {
-            traceId = traceId + "-E" + REQUEST_ATOMIC_INTEGER_ERROR.incrementAndGet();
+        //
+        //
+        String sw8 = this.getHeaderValue(request, headers, "sw8", "sw8");
+        ContextCarrierRef contextCarrierRef = new ContextCarrierRef();
+        CarrierItemRef items = contextCarrierRef.items();
+        while (items.hasNext()) {
+            items = items.next();
+            if ("sw8".equals(items.getHeadKey())) {
+                items.setHeadValue(sw8);
+            }
         }
+        String operationName = request.getMethod() + ":" + request.getPath();
+        SpanRef spanRef = Tracer.createEntrySpan(operationName, contextCarrierRef);
+        String traceId = TraceContext.traceId();
+        if (StringUtils.isBlank(traceId) || "N/A".equalsIgnoreCase(traceId)) {
+            traceId = this.getHeaderValue(request, headers, this.configuration.getTraceHeaderKey(), this.configuration.getTraceQueryKey());
+        } else {
+            // 上报skywalking
+            ActiveSpan.info(exceptionEntity.getBody());
+            Tracer.stopSpan();
+            spanRef.asyncFinish();
+        }
+        if (StringUtils.isBlank(traceId)) {
+            // gateway自生成
+            traceId = configuration.getTraceIdPrefix() + configuration.getStartupTimeMillis() + configuration.getTraceIdAppend() + "E" + REQUEST_ATOMIC_INTEGER_ERROR.incrementAndGet();
+        }
+
         MDC.put(Constant.TRACE_ID, traceId);
         String msg = "{\"code\":" + exceptionEntity.getHttpCode() + ",\"message\": \"" + exceptionEntity.getBody() + "\",\"traceId\":\"" + traceId + "\"}";
         result.put(HTTP_BODY, msg);

@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.globalfilter.GlobalChainContext;
 import tech.finovy.gateway.globalfilter.GlobalChainEventPushHandler;
 import tech.finovy.gateway.globalfilter.listener.GlobalAuthListener;

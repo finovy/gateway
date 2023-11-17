@@ -1,12 +1,14 @@
 server:
   port: ${GATEWAY_PORT:8750}
 spring:
+  main:
+    web-application-type: reactive
   application:
-    id: ${APPLICATION_NAME:gateway-server}
-    name: ${APPLICATION_NAME:gateway-server}
+    id: ${APPLICATION_NAME:gateway}
+    name: ${APPLICATION_NAME:gateway}
   config:
     import:
-      - optional:nacos:${APPLICATION_NAME:gateway-server}.yaml
+      - optional:nacos:${APPLICATION_NAME:gateway}.yaml
   cloud:
     gateway:
       enabled: true
@@ -35,7 +37,7 @@ spring:
         server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:}
         namespace: ${NACOS_DISCOVERY_NAMESPACE:}
         enabled: true
-        register-enabled: false
+        register-enabled: true
         metadata:
           version: ${NACOS_DISCOVERY_METADATA_VERSION:0.0}
     sentinel:
@@ -47,7 +49,7 @@ spring:
           nacos:
             server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
             namespace: ${NACOS_CONFIG_NAMESPACE:}
-            group-id: ${NACOS_SENTINEL_FLOW_GROUP_ID:}
+            group-id: ${NACOS_SENTINEL_FLOW_GROUP_ID:SENTINEL_FLOW_GROUP}
             rule-type: FLOW
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
@@ -107,7 +109,7 @@ logging:
   access-secret: ${LOG_STORE_SECRET:TEST-SECRET}
   log-store: ${APPLICATION_NAME:gateway}
   topic: ${LOG_STORE_TOPIC:${APPLICATION_NAME:gateway}}
-  console-level: ${LOG_CONSOLE_LEVEL:WARN}
+  console-level: ${LOG_CONSOLE_LEVEL:INFO}
 
 gateway:
   exception:

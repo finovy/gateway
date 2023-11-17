@@ -17,24 +17,44 @@
     </properties>
 
     <dependencies>
+        <!--starter-->
+        <dependency>
+            <groupId>tech.finovy</groupId>
+            <artifactId>framework-starter-healthcheck</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tech.finovy</groupId>
+            <artifactId>framework-starter-http-logappender</artifactId>
+        </dependency>
+        <!--gateway-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
         <dependency>
             <groupId>tech.finovy</groupId>
             <artifactId>gateway-core</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
+        <!--knife4j-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!--test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

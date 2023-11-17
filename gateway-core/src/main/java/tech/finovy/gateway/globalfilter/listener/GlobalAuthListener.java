@@ -1,6 +1,6 @@
 package tech.finovy.gateway.globalfilter.listener;
 
-import tech.finovy.gateway.common.chain.ChainListener;
+import tech.finovy.framework.common.core.chain.ChainListener;
 import tech.finovy.gateway.globalfilter.GlobalChainContext;
 
 public interface GlobalAuthListener extends ChainListener {

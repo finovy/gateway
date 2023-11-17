@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.entity.SkipUrlItemEntity;
 import tech.finovy.gateway.globalfilter.decorator.GlobalAuthRequestDecorator;
 import tech.finovy.gateway.globalfilter.decorator.GlobalAuthResponseDecorator;

@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.framework.disruptor.core.event.DisruptorEvent;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.constant.GlobalAuthConstant;
 import tech.finovy.gateway.common.entity.ResponseEvent;
-import tech.finovy.gateway.disruptor.core.event.DisruptorEvent;
 import tech.finovy.gateway.globalfilter.listener.AbstractDisruptorChainEventListener;
 import tech.finovy.gateway.remote.RemoteLogPush;
 

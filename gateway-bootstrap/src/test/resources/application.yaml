@@ -1,6 +1,8 @@
 server:
   port: ${GATEWAY_PORT:8750}
 spring:
+  main:
+    web-application-type: reactive
   application:
     id: ${APPLICATION_NAME:gateway}
     name: ${APPLICATION_NAME:gateway}
@@ -23,8 +25,8 @@ spring:
       ribbon:
         enabled: false
     nacos:
-      username: ${NACOS_USERNAME:}
-      password: ${NACOS_PASSWORD:}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:F0fdsGT2wVDU6A643}
       config:
         server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
         namespace: ${NACOS_CONFIG_NAMESPACE:}
@@ -41,7 +43,7 @@ spring:
     sentinel:
       transport:
         port: ${SENTINEL_DASHBOARD_PORT:8719}
-        dashboard: ${SENTINEL_DASHBOARD_ADDR:}
+        dashboard: ${SENTINEL_DASHBOARD_ADDR:127.0.0.1:8080}
       datasource:
         flow-nacos:
           nacos:
@@ -104,28 +106,10 @@ logging:
   project: ${LOG_STORE_PROJECT:}
   endpoint-url: ${LOG_STORE_ENDPOINT:}
   access-key: ${LOG_STORE_KEY:TEST-KEY}
-  access-secret: ${LOG_STORE_SECRET:TEST-SERET}
+  access-secret: ${LOG_STORE_SECRET:TEST-SECRET}
   log-store: ${APPLICATION_NAME:gateway}
   topic: ${LOG_STORE_TOPIC:${APPLICATION_NAME:gateway}}
   console-level: ${LOG_CONSOLE_LEVEL:INFO}
-#  level:
-#    org.springframework.cloud.gateway: trace
-#    org.springframework.http.server.reactive: trace
-#    org.springframework.web.reactive: trace
-#    org.springframework.boot.autoconfigure.web: trace
-#org.springframework.gateway.httpserver.wiretap: true
-#org.springframework.gateway.httpclient.wiretap: true
-
-
-endpoints:
-  enabled: false
-  env:
-    enabled: false
-management:
-  endpoints:
-    enabled-by-default: false
-    info:
-      enabled: false
 
 gateway:
   exception:
@@ -135,3 +119,7 @@ gateway:
     skip-refresh: false
   event:
     enable: false
+  route:
+    data-id:
+      route: gateway-routes.json
+      skip-url: gateway-skip-url.json

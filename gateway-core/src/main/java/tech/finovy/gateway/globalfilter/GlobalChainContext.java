@@ -4,7 +4,7 @@ package tech.finovy.gateway.globalfilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.entity.HostItemEntity;
 import tech.finovy.gateway.common.entity.SkipUrlItemEntity;
 import tech.finovy.gateway.globalfilter.listener.GlobalAuthListener;

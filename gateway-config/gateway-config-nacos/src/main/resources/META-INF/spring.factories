@@ -1,6 +1,0 @@
-org.springframework.cloud.bootstrap.BootstrapConfiguration=\
-tech.finovy.gateway.config.nacos.eNacosConfigBootstrapConfiguration
-org.springframework.context.ApplicationListener=\
-tech.finovy.gateway.config.nacos.listener.NacosLoggingListener
-org.springframework.boot.env.EnvironmentPostProcessor=\
-tech.finovy.gateway.config.nacos.env.GatewayEnvironmentPostProcessor

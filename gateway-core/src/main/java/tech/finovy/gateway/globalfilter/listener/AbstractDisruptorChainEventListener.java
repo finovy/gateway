@@ -7,10 +7,10 @@ import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.framework.disruptor.core.listener.AbstractDisruptorListener;
+import tech.finovy.gateway.config.GatewayConfiguration;
 import tech.finovy.gateway.common.constant.GlobalAuthConstant;
-import tech.finovy.gateway.disruptor.core.listener.AbstractDisruptorListener;
-import tech.finovy.gateway.listener.DisrptorConfigurationService;
+import tech.finovy.gateway.listener.DisruptorConfigurationService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-public abstract class AbstractDisruptorChainEventListener extends AbstractDisruptorListener implements DisrptorConfigurationService {
+public abstract class AbstractDisruptorChainEventListener extends AbstractDisruptorListener implements DisruptorConfigurationService {
 
 
     private GatewayConfiguration configuration;

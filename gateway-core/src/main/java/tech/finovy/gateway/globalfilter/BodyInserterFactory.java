@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.server.HandlerStrategies;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tech.finovy.gateway.common.configuration.GatewayConfiguration;
+import tech.finovy.gateway.config.GatewayConfiguration;
 
 import java.util.List;
 
