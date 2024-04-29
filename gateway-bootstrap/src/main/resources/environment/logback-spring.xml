@@ -24,6 +24,13 @@
         </encoder>
         <mdcFields>${mdcFields}</mdcFields>
     </appender>
+    <appender name="grpc-log" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+                <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} %line- %msg%n</Pattern>
+            </layout>
+        </encoder>
+    </appender>
     <logger name="org.apache.http.impl.conn.Wire" level="WARN"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -37,9 +44,11 @@
     <logger name="tech.finovy" level="INFO" additivity="false">
         <appender-ref ref="console"/>
         <appender-ref ref="http"/>
+        <appender-ref ref="grpc-log"/>
     </logger>
     <root level="WARN" additivity="false">
-        <appender-ref ref="http"/>
         <appender-ref ref="console"/>
+        <appender-ref ref="http"/>
+        <appender-ref ref="grpc-log"/>
     </root>
 </configuration>

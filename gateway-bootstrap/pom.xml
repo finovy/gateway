@@ -30,6 +30,10 @@
             <groupId>tech.finovy</groupId>
             <artifactId>framework-starter-http-logappender</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tech.finovy</groupId>
+            <artifactId>framework-starter-skywalking</artifactId>
+        </dependency>
         <!--gateway-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

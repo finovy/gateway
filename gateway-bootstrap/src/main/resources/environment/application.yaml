@@ -1,14 +1,15 @@
 server:
+  shutdown: graceful
   port: ${GATEWAY_PORT:8750}
 spring:
   main:
     web-application-type: reactive
   application:
-    id: ${APPLICATION_NAME:gateway}
-    name: ${APPLICATION_NAME:gateway}
+    id: ${APPLICATION_NAME:crm-backend-gateway-kong}
+    name: ${APPLICATION_NAME:crm-backend-gateway-kong}
   config:
     import:
-      - optional:nacos:${APPLICATION_NAME:gateway}.yaml
+      - optional:nacos:${APPLICATION_NAME:crm-backend-gateway-kong}.yaml
   cloud:
     gateway:
       enabled: true
@@ -25,17 +26,17 @@ spring:
       ribbon:
         enabled: false
     nacos:
-      username: ${NACOS_USERNAME:}
-      password: ${NACOS_PASSWORD:}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:F0fdsGT2wVDU6A643}
       config:
-        server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-        namespace: ${NACOS_CONFIG_NAMESPACE:}
+        server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+        namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
         group: DEFAULT_GROUP
         file-extension: yaml
         maxRetry: 10
       discovery:
-        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:}
-        namespace: ${NACOS_DISCOVERY_NAMESPACE:}
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:10.6.0.25:8848}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:stg_crm_v5_java}
         enabled: true
         register-enabled: true
         metadata:
@@ -47,56 +48,56 @@ spring:
       datasource:
         flow-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_FLOW_GROUP_ID:SENTINEL_FLOW_GROUP}
             rule-type: FLOW
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
         gw-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_GW_GROUP_ID:SENTINEL_GW_GROUP}
             rule-type: GW_FLOW
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
         gw-api-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_GW_API_GROUP_ID:SENTINEL_GW_API_GROUP}
             rule-type: GW_API_GROUP
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
         degrade-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_DEGRADE_GROUP_ID:SENTINEL_DEGRADE_GROUP}
             rule-type: DEGRADE
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
         system-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_SYSTEM_GROUP_ID:SENTINEL_SYSTEM_GROUP}
             rule-type: SYSTEM
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
         param-flow-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_PARAM_FLOW_GROUP_ID:SENTINEL_PARAM_FLOW_GROUP}
             rule-type: PARAM_FLOW
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json
             data-type: json
         authority-nacos:
           nacos:
-            server-addr: ${NACOS_CONFIG_SERVER_ADDR:}
-            namespace: ${NACOS_CONFIG_NAMESPACE:}
+            server-addr: ${NACOS_CONFIG_SERVER_ADDR:10.6.0.25:8848}
+            namespace: ${NACOS_CONFIG_NAMESPACE:stg_crm_v5_java}
             group-id: ${NACOS_SENTINEL_AUTHORITY_GROUP_ID:SENTINEL_AUTHORITY_GROUP}
             rule-type: AUTHORITY
             data-id: ${NACOS_SENTINEL_DATA_ID:gateway}-sentinel.json

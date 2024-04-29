@@ -1,6 +1,7 @@
 package tech.finovy.gateway.globalfilter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.skywalking.apm.toolkit.webflux.WebFluxSkyWalkingTraceContext;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -48,6 +49,8 @@ public class GlobalDecoratorFilter implements GlobalFilter, Ordered {
     }
 
     private Mono<Void> post(ServerWebExchange exchange, GatewayFilterChain chain, GlobalChainContext context) {
+        String traceId = WebFluxSkyWalkingTraceContext.traceId(exchange);
+        log.info("POST current traceid:{}", traceId);
         GlobalAuthResponseDecorator responseDecorator = new GlobalAuthResponseDecorator(exchange, configuration, tokenEventPushHandler);
         if (configuration.isChainSkip()) {
             return skipPost(exchange, chain, context);

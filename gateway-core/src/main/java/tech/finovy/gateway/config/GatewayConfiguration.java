@@ -69,8 +69,12 @@ public class GatewayConfiguration {
     private String traceIdAppend;
     @Value("${gateway.trace.trace-id-header-key:x-trace-id}")
     private String traceHeaderKey;
+    @Value("${gateway.trace.sw8-trace-id-header-key:sw8}")
+    private String sw8TraceHeaderKey;
     @Value("${gateway.trace.trace-id-query-key:x-trace-id}")
     private String traceQueryKey;
+    @Value("${gateway.trace.sw8-trace-id-query-key:sw8}")
+    private String sw8TraceQueryKey;
     @Value("${gateway.trace.trace-if-context-is-null:true}")
     private boolean traceIfContextIsNull;
     @Value("${gateway.trace.debug:false}")

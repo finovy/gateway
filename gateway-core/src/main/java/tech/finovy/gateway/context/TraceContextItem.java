@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.UUID;
 
 @Data
 public class TraceContextItem {
@@ -75,4 +76,42 @@ public class TraceContextItem {
     private static String base64Decode2String(String str) {
         return new String(Base64.getDecoder().decode(str), StandardCharsets.UTF_8);
     }
+    private static String base64Encode2String(String str) {
+        return new String(Base64.getEncoder().encode(str.getBytes(StandardCharsets.UTF_8)));
+    }
+
+
+    public static String generateSW8ID() {
+        return encodeBase64(UUID.randomUUID().toString());
+    }
+
+    public static int generateSW8ParentSpanID() {
+        return 0;
+    }
+
+    public static String generateSW8ParentInfo(String info) {
+        return encodeBase64(info);
+    }
+
+    public static String generateSW8TargetAddress(String targetAddress) {
+        return encodeBase64(targetAddress);
+    }
+
+    private static String encodeBase64(String input) {
+        return Base64.getEncoder().encodeToString(input.getBytes());
+    }
+
+    public static String getSw8(String traceId,String uri,String applicationName,String endpoint) {
+        String sw8SegmentID = generateSW8ID();
+        String sw8ParentTraceSegmentID = generateSW8ID();
+        int sw8ParentSpanID = generateSW8ParentSpanID();
+        String sw8ParentService = generateSW8ParentInfo(applicationName);
+        String sw8ParentInstance = generateSW8ParentInfo(applicationName);
+        String sw8ParentEndpoint = generateSW8ParentInfo(endpoint);
+        String sw8TargetAddress = generateSW8TargetAddress(uri);
+        return "1" + traceId + "-" + sw8SegmentID + "-" + sw8ParentTraceSegmentID + "-" +
+                sw8ParentSpanID + "-" + sw8ParentService + "-" + sw8ParentInstance + "-" +
+                sw8ParentEndpoint + "-" + sw8TargetAddress;
+    }
+
 }

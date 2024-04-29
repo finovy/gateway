@@ -5,17 +5,16 @@
     <parent>
         <groupId>tech.finovy</groupId>
         <artifactId>framework-cloud-parent</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
     <artifactId>gateway</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
     <properties>
-        <revision>0.1.0-SNAPSHOT</revision>
-        <lombok.version>1.18.26</lombok.version>
-        <io.grpc.version>1.54.1</io.grpc.version>
-        <apm-toolkit-trace.version>8.16.0</apm-toolkit-trace.version>
+        <revision>0.2.0</revision>
+        <io.grpc.version>1.61.0</io.grpc.version>
+        <skywalking.version>9.1.0</skywalking.version>
         <knife4j.version>3.0.3</knife4j.version>
     </properties>
 
@@ -36,7 +35,12 @@
             <dependency>
                 <groupId>org.apache.skywalking</groupId>
                 <artifactId>apm-toolkit-trace</artifactId>
-                <version>${apm-toolkit-trace.version}</version>
+                <version>${skywalking.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-webflux</artifactId>
+                <version>${skywalking.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -45,7 +49,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -61,7 +61,7 @@ public class DispatcherHandlerMethodInterceptor implements MethodInterceptor {
             TraceContextItem contextItem = TraceContextItem.deserialize(traceId);
             if (contextItem.isValid()) {
                 // 如果traceId是skywalking的上下文， 那么转接一下
-                exchange.getRequest().mutate().header("sw8", traceId);
+                exchange.getRequest().mutate().header(this.configuration.getSw8TraceHeaderKey(), traceId);
                 // 替换traceId的值
                 traceId = contextItem.getTraceId();
                 exchange.getRequest().mutate().header(this.configuration.getTraceHeaderKey(), traceId);
@@ -70,10 +70,15 @@ public class DispatcherHandlerMethodInterceptor implements MethodInterceptor {
                 // 使用生成的sw8
                 traceId = TraceContext.traceId();
                 exchange.getRequest().mutate().header(this.configuration.getTraceHeaderKey(), traceId);
+                if (configuration.isTraceDebug()) {
+                    log.info("Skywalking traceId:{}", traceId);
+                }
             }
-            if (StringUtils.isBlank(traceId) || "N/A".equalsIgnoreCase(traceId)) {
+            if (StringUtils.isBlank(traceId) || "N/A".equalsIgnoreCase(traceId) || "Ignored_Trace".equalsIgnoreCase(traceId)) {
                 // gateway自生成
                 traceId = configuration.getTraceIdPrefix() + configuration.getStartupTimeMillis() + configuration.getTraceIdAppend() + requestCount;
+                // todo  skywalking 9.2.0 后去掉此处
+                exchange.getRequest().mutate().header(this.configuration.getSw8TraceHeaderKey(), TraceContextItem.getSw8(traceId, uri.toString(), configuration.getApplicationName(), path));
             }
             String inputToken = getHeaderValue(request, headers, configuration.getHeaderTokenKey(), configuration.getQueryTokenKey());
             String tokenHeaderAppId = getHeaderValue(request, headers, configuration.getHeaderAppKey(), configuration.getQueryAppKey());
